@@ -1,0 +1,61 @@
+# Pre-commit hooks configuration
+# See https://pre-commit.com for more information
+
+repos:
+  # Ruff for Python linting and formatting
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.15
+    hooks:
+      # Run the linter
+      - id: ruff
+        name: ruff-check
+        args: [--fix, --exit-non-zero-on-fix]
+      # Run the formatter
+      - id: ruff-format
+        name: ruff-format
+
+  # Pyright for Python type checking
+  - repo: https://github.com/RobertCraigie/pyright-python
+    rev: v1.1.348
+    hooks:
+      - id: pyright
+        name: pyright
+        additional_dependencies: []
+
+  # Prettier for formatting various file types
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0
+    hooks:
+      - id: prettier
+        name: prettier
+        types_or: [css, javascript, jsx, ts, tsx, json, yaml, markdown]
+        exclude: |
+          (?x)(
+            ^package-lock\.json$|
+            ^yarn\.lock$
+          )
+
+  # ESLint for Next.js linting (if applicable)
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v8.56.0
+    hooks:
+      - id: eslint
+        name: next-lint
+        files: \.(js|jsx|ts|tsx)$
+        types: [file]
+        additional_dependencies:
+          - eslint@8.56.0
+          - eslint-config-next@14.0.0
+
+  # Additional useful hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: mixed-line-ending
