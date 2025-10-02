@@ -3,14 +3,18 @@ name = "project-template"
 version = "0.1.0"
 description = "A comprehensive project template with modern tooling"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.13"
 dependencies = []
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     "ruff>=0.1.0",
     "pyright>=1.1.0",
     "pre-commit>=3.5.0",
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+]
+test = [
     "pytest>=7.4.0",
     "pytest-cov>=4.1.0",
 ]
@@ -20,9 +24,15 @@ docs = [
     "sphinx-autodoc-typehints>=1.24.0",
 ]
 
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+
+[tool.uv]
+default-groups = ["dev", "test", "docs"]
+
+[tool.uv.sources]
+package = { workspace = true }
+
+[tool.uv.workspace]
+members = ["projects/*"]
 
 
 [tool.ruff]
