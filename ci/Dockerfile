@@ -25,7 +25,8 @@ COPY README.md .
 # Install Python dependencies
 RUN uv venv && \
     . .venv/bin/activate && \
-    uv pip install -e ".[dev,docs]"
+    uv pip install -e . && \
+    uv sync --group dev --group docs
 
 # Set the entrypoint to use the virtual environment
 ENV PATH="/app/.venv/bin:${PATH}"
