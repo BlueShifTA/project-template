@@ -1,64 +1,59 @@
 # Project Template
 
-A comprehensive project template with modern development tooling and best practices.
+A modern full-stack project template with Next.js, React, FastAPI, and Python. This template provides a solid foundation for building web applications with best practices, modern tooling, and comprehensive documentation.
 
-## 🚀 Features
+## ✨ Overview
 
-- **Modern Python tooling** with [uv](https://github.com/astral-sh/uv) for fast package management
-- **Code quality** with [ruff](https://github.com/astral-sh/ruff) (linting & formatting) and [pyright](https://github.com/microsoft/pyright) (type checking)
-- **Pre-commit hooks** for automated code quality checks
-- **Task automation** with [just](https://github.com/casey/just)
-- **Documentation** with [Sphinx](https://www.sphinx-doc.org/)
-- **Containerization** with Docker
-- **Testing** with pytest
+This template is designed to be copied and customized for new projects. It includes:
 
-## 📋 Tech Stack
-
-- **Python 3.11+**
-- **uv** - Fast Python package installer and resolver
-- **just** - Command runner for task automation
-- **Docker** - Containerization platform
-- **Pre-commit hooks** with:
-  - `ruff-format` - Code formatting
-  - `ruff-check` - Code linting
-  - `pyright` - Static type checking
-  - `prettier` - Multi-language formatting
-  - `next-lint` - Next.js/JavaScript linting
+- **Full-stack architecture** - Next.js frontend with FastAPI backend
+- **Modern Python tooling** - Python 3.13+ with uv package manager
+- **Type-safe development** - TypeScript and Python type checking
+- **Automated quality checks** - Pre-commit hooks, linting, and testing
+- **CI/CD ready** - GitHub Actions workflows for testing and deployment
+- **Comprehensive documentation** - Sphinx documentation with GitHub Pages deployment
 
 ## 📁 Project Structure
 
 ```
 project-template/
+├── .github/                 # GitHub configuration
+│   ├── workflows/          # CI/CD workflows
+│   └── copilot-instructions.md
 ├── devops/                  # DevOps configurations
+│   ├── ci/                 # Docker and CI configs
 │   └── .pre-commit-config.yaml
 ├── docs/                    # Sphinx documentation
 │   ├── conf.py
 │   ├── index.rst
 │   ├── getting-started.rst
 │   ├── development.rst
+│   ├── tech-stack.rst
 │   └── api/
-├── projects/                # Core project code
-│   ├── __init__.py
-│   ├── example.py
-│   └── tests/
-├── ci/                      # CI/CD and Docker configs
-│   ├── Dockerfile
-│   └── docker-compose.yml
-├── pyproject.toml           # Project configuration
+├── projects/                # Project code
+│   ├── backend/            # Python backend (FastAPI)
+│   │   ├── api/           # API package
+│   │   ├── package/       # Backend package
+│   │   └── tests/         # Backend tests
+│   └── frontend/           # Next.js frontend
+│       ├── src/           # Source code
+│       └── public/        # Static assets
+├── pyproject.toml           # Python project configuration
 ├── justfile                 # Task automation
 └── README.md
 ```
 
 ## 🛠️ Prerequisites
 
-Before you begin, ensure you have the following installed:
+- **Python 3.13+** - [Installation guide](https://www.python.org/downloads/)
+- **uv** - Fast Python package manager - `curl -LsSf https://astral.sh/uv/install.sh | sh`
+- **just** - Task automation - [Installation guide](https://github.com/casey/just#installation)
+- **Node.js 20+** - For frontend development - [Installation guide](https://nodejs.org/)
+- **Docker** (optional) - For containerization - [Installation guide](https://docs.docker.com/get-docker/)
 
-- Python 3.11 or higher
-- [uv](https://github.com/astral-sh/uv) - `curl -LsSf https://astral.sh/uv/install.sh | sh`
-- [just](https://github.com/casey/just) - See [installation instructions](https://github.com/casey/just#installation)
-- Docker (optional, for containerization)
+## 🚀 Quick Start
 
-## 🚦 Quick Start
+### Backend Setup
 
 1. **Clone the repository**:
    ```bash
@@ -66,123 +61,72 @@ Before you begin, ensure you have the following installed:
    cd project-template
    ```
 
-2. **Set up the development environment**:
+2. **Install Python dependencies**:
    ```bash
-   just setup
-   ```
-   This will:
-   - Create a virtual environment
-   - Install all dependencies (dev & docs)
-   - Set up pre-commit hooks
-
-3. **Verify the setup**:
-   ```bash
-   just test
+   uv sync --all-packages --all-groups
    ```
 
-## 📖 Common Tasks
+3. **Set up pre-commit hooks**:
+   ```bash
+   uv run pre-commit install --config devops/.pre-commit-config.yaml
+   ```
 
-List all available tasks:
-```bash
-just
-```
+4. **Run tests**:
+   ```bash
+   uv run pytest projects/backend/tests -v
+   ```
 
-### Development
+### Frontend Setup
 
-- **Install dependencies**: `just install`
-- **Run linters**: `just lint`
-- **Format code**: `just format`
-- **Type check**: `just typecheck`
-- **Run all quality checks**: `just qa`
+1. **Navigate to frontend directory**:
+   ```bash
+   cd projects/frontend
+   ```
 
-### Testing
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-- **Run tests**: `just test`
-- **Run tests with coverage**: `just test-coverage`
+3. **Run development server**:
+   ```bash
+   npm run dev
+   ```
 
-### Documentation
+4. **Visit** http://localhost:3000
 
-- **Build documentation**: `just docs-build`
-- **Serve documentation**: `just docs-serve` (then visit http://localhost:8000)
-
-### Docker
-
-- **Build Docker image**: `just docker-build`
-- **Run Docker container**: `just docker-run`
-- **Start services**: `just docker-compose-up`
-- **Stop services**: `just docker-compose-down`
-
-### Maintenance
-
-- **Clean build artifacts**: `just clean`
-- **Update pre-commit hooks**: `just update-hooks`
-- **Show project info**: `just info`
-
-## 🧪 Testing
-
-Tests are located in `projects/tests/` and use pytest:
-
-```bash
-# Run all tests
-just test
-
-# Run with coverage report
-just test-coverage
-
-# Run specific test file
-pytest projects/tests/test_example.py
-```
+For more detailed information, see the [Getting Started Guide](docs/getting-started.rst) and [Development Guide](docs/development.rst).
 
 ## 📚 Documentation
 
-Documentation is built with Sphinx and located in the `docs/` directory:
+Comprehensive documentation is available in the `docs/` directory:
+
+- **[Getting Started](docs/getting-started.rst)** - Setup and installation
+- **[Development Guide](docs/development.rst)** - Development workflow and tools
+- **[Technology Stack](docs/tech-stack.rst)** - Detailed tech stack information
+- **[API Reference](docs/api/modules.rst)** - API documentation
+
+Build and view the documentation locally:
 
 ```bash
-# Build documentation
-just docs-build
-
-# Serve documentation locally
-just docs-serve
+cd docs
+pip install sphinx sphinx-rtd-theme sphinx-autodoc-typehints
+sphinx-build -b html . _build/html
+# Open _build/html/index.html in your browser
 ```
 
-Then visit http://localhost:8000
+## 🤝 Contributing
 
-## 🎨 Code Quality
+This is a template repository. To use it:
 
-This project uses multiple tools to ensure code quality:
+1. Click "Use this template" on GitHub
+2. Clone your new repository
+3. Customize for your project
+4. Remove or modify example code
+5. Update documentation to match your project
 
-- **ruff**: Fast Python linter and formatter
-- **pyright**: Static type checker
-- **pre-commit**: Automated pre-commit hooks
-- **prettier**: Code formatter for various file types
-- **eslint**: JavaScript/TypeScript linter
+For more information, see the [documentation](docs/).
 
-Pre-commit hooks run automatically before each commit. To run manually:
+## 📄 License
 
-```bash
-just lint
-```
-
-## 🐳 Docker
-
-Build and run the project in Docker:
-
-```bash
-# Build the Docker image
-just docker-build
-
-# Run the container
-just docker-run
-
-# Use docker-compose for multiple services
-just docker-compose-up
-```
-
-## 📝 Configuration Files
-
-- `pyproject.toml` - Python project configuration (dependencies, tools)
-- `justfile` - Task automation commands
-- `devops/.pre-commit-config.yaml` - Pre-commit hooks configuration
-- `ci/Dockerfile` - Docker image definition
-- `ci/docker-compose.yml` - Docker compose services
-- `docs/conf.py` - Sphinx documentation configuration
+This template is provided as-is for you to use and modify as needed for your projects.
