@@ -1,74 +1,87 @@
 Development Guide
 =================
 
+This guide covers the development workflow, tools, and best practices for working with this project.
+
 Development Workflow
 --------------------
 
-Common Tasks
-^^^^^^^^^^^^
+Backend Development
+^^^^^^^^^^^^^^^^^^^
 
-Use the ``just`` command runner for common development tasks:
+**Running tests**::
 
-* **List all tasks**::
+    uv run pytest projects/backend/tests -v
 
-    just
+**With coverage**::
 
-* **Run linters**::
+    uv run pytest projects/backend/tests --cov=projects/backend/api --cov-report=term
 
-    just lint
+**Linting and formatting**::
 
-* **Format code**::
+    uv run ruff check projects/backend
+    uv run ruff format projects/backend
 
-    just format
+**Type checking**::
 
-* **Type check**::
+    uv run pyright projects/backend
 
-    just typecheck
+Frontend Development
+^^^^^^^^^^^^^^^^^^^^
 
-* **Run all quality checks**::
+**Development server**::
 
-    just qa
+    cd projects/frontend
+    npm run dev
 
-* **Run tests**::
+**Linting**::
 
-    just test
+    npm run lint
 
-* **Run tests with coverage**::
+**Format code**::
 
-    just test-coverage
+    npm run prettify
 
-* **Build documentation**::
+**Build for production**::
 
-    just docs-build
-
-* **Clean artifacts**::
-
-    just clean
+    npm run build
 
 Code Quality
 ------------
 
-This project uses multiple tools to ensure code quality:
+This project uses multiple tools to ensure code quality across both backend and frontend.
 
-Ruff
-^^^^
+Backend Tools
+^^^^^^^^^^^^^
 
-Ruff is used for both linting and formatting Python code.
+**Ruff** - Fast Python linter and formatter
 
-* **Format code**: ``ruff format projects/``
-* **Check code**: ``ruff check projects/ --fix``
+* Format code: ``uv run ruff format projects/backend``
+* Check code: ``uv run ruff check projects/backend --fix``
+* Configuration in ``pyproject.toml``
 
-Pyright
-^^^^^^^
+**Pyright** - Static type checker
 
-Pyright provides static type checking.
+* Type check: ``uv run pyright projects/backend``
+* Ensures type safety across the backend
 
-* **Type check**: ``pyright projects/``
+Frontend Tools
+^^^^^^^^^^^^^^
+
+**ESLint** - JavaScript/TypeScript linter
+
+* Run linting: ``npm run lint``
+* Configuration in ``.eslintrc.json``
+
+**Prettier** - Code formatter
+
+* Format code: ``npm run prettify``
+* Check formatting: ``npm run prettier``
 
 Pre-commit Hooks
 ^^^^^^^^^^^^^^^^
 
-Pre-commit hooks run automatically before each commit:
+Pre-commit hooks run automatically before each commit to ensure code quality:
 
 * ``ruff-check`` - Lints Python code
 * ``ruff-format`` - Formats Python code
@@ -76,53 +89,92 @@ Pre-commit hooks run automatically before each commit:
 * ``prettier`` - Formats various file types
 * ``next-lint`` - Lints JavaScript/TypeScript files
 
-Run manually with::
+**Install hooks**::
 
-    pre-commit run --all-files
+    uv run pre-commit install --config devops/.pre-commit-config.yaml
+
+**Run manually**::
+
+    uv run pre-commit run --all-files --config devops/.pre-commit-config.yaml
 
 Testing
 -------
 
-Tests are located in ``projects/tests/`` and use pytest.
+Backend Testing
+^^^^^^^^^^^^^^^
 
-Writing Tests
-^^^^^^^^^^^^^
+Tests are located in ``projects/backend/tests/`` and use pytest.
+
+**Writing Tests**
 
 Create test files with the ``test_`` prefix::
 
-    # projects/tests/test_example.py
-    def test_something():
+    # projects/backend/tests/test_example.py
+    def test_something() -> None:
+        """Test description."""
         assert True
 
-Running Tests
-^^^^^^^^^^^^^
+**Running Tests**
 
-* **Run all tests**: ``just test``
-* **With coverage**: ``just test-coverage``
-* **Specific test**: ``pytest projects/tests/test_example.py``
+* Run all tests: ``uv run pytest projects/backend/tests -v``
+* With coverage: ``uv run pytest projects/backend/tests --cov=projects/backend/api``
+* Specific test: ``uv run pytest projects/backend/tests/test_example.py``
+
+Frontend Testing
+^^^^^^^^^^^^^^^^
+
+Frontend tests can be added using React Testing Library and Jest (to be configured as needed).
+
+API Integration
+---------------
+
+The frontend can generate type-safe API clients from the backend OpenAPI specification.
+
+**Generate API client**::
+
+    cd projects/frontend
+    npm run api
+
+This will:
+
+1. Download the OpenAPI spec from the running backend (http://localhost:8000/api/openapi.json)
+2. Generate TypeScript types and API client using orval
 
 Docker
 ------
 
-Build and run the project in Docker containers:
+Build and run the project in Docker containers.
 
-* **Build image**: ``just docker-build``
-* **Run container**: ``just docker-run``
-* **Start services**: ``just docker-compose-up``
-* **Stop services**: ``just docker-compose-down``
+**Build image**::
+
+    cd devops/ci
+    docker build -t project-template .
+
+**Docker Compose**::
+
+    cd devops/ci
+    docker-compose up
 
 Documentation
 -------------
 
 Documentation is built with Sphinx and uses reStructuredText format.
 
-Building Docs
-^^^^^^^^^^^^^
+Building Documentation
+^^^^^^^^^^^^^^^^^^^^^^
 
-* **Build**: ``just docs-build``
-* **Serve locally**: ``just docs-serve``
+**Install dependencies**::
 
-Then visit http://localhost:8000
+    uv pip install --system sphinx sphinx-rtd-theme sphinx-autodoc-typehints
+
+**Build HTML**::
+
+    cd docs
+    sphinx-build -b html . _build/html
+
+**View locally**
+
+Open ``docs/_build/html/index.html`` in your browser.
 
 Adding Documentation
 ^^^^^^^^^^^^^^^^^^^^
@@ -130,3 +182,24 @@ Adding Documentation
 1. Create ``.rst`` files in the ``docs/`` directory
 2. Add them to the ``toctree`` in ``index.rst``
 3. Rebuild the documentation
+
+CI/CD Pipeline
+--------------
+
+The project uses GitHub Actions for continuous integration and deployment.
+
+**CI/CD Workflow** (``.github/workflows/ci.yml``)
+
+* Frontend linting with ESLint
+* Backend linting with ruff
+* Backend testing with pytest
+* Coverage reporting with Codecov
+
+**Documentation Workflow** (``.github/workflows/docs.yml``)
+
+* Builds Sphinx documentation
+* Deploys to GitHub Pages
+* Triggers on docs changes or manual dispatch
+
+See :doc:`tech-stack` for more details on the CI/CD pipeline.
+

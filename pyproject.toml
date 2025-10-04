@@ -28,11 +28,8 @@ docs = [
 [tool.uv]
 default-groups = ["dev", "test", "docs"]
 
-[tool.uv.sources]
-package = { workspace = true }
-
 [tool.uv.workspace]
-members = ["projects/*"]
+members = ["projects/backend"]
 
 
 [tool.ruff]
@@ -73,19 +70,19 @@ reportMissingImports = true
 reportMissingTypeStubs = false
 
 [tool.pytest.ini_options]
-testpaths = ["projects/tests"]
+testpaths = ["projects/backend/tests"]
 python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = [
-    "--cov=projects",
+    "--cov=projects/backend",
     "--cov-report=term-missing",
     "--cov-report=html",
     "--verbose",
 ]
 
 [tool.coverage.run]
-source = ["projects"]
+source = ["projects/backend"]
 omit = ["*/tests/*", "*/test_*.py"]
 
 [tool.coverage.report]
