@@ -28,11 +28,8 @@ docs = [
 [tool.uv]
 default-groups = ["dev", "test", "docs"]
 
-[tool.uv.sources]
-package = { workspace = true }
-
 [tool.uv.workspace]
-members = ["projects/*"]
+members = ["projects/backend"]
 
 
 [tool.ruff]
